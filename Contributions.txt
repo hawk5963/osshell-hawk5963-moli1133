@@ -1,0 +1,7 @@
+Leo Molitor, Mike Hawkins
+
+Contributions:
+
+For the most part, both of us were working together.  The only time we split up work was at the end when Mike added a few functions for splitting, combining (referred to as the Smash function), and trimming, as well as making the history command work when we have "history x", where x is a number of history entries to show. Leo worked on getting the path to read in properly and get non-native commands to our OS Shell to run. (So everything but exit and history related commands). Anything not noted to be specifically done by Mike or Leo was a joint effort. 
+
+Our biggest struggles were with getting C and C++ related things to work properly, but usually any questions were answered by a simple google search. The only real conceptual problem was one we encountered towards the end with quotation marks, but once we thought it out, the solution was simply tying together Mike's split, combine, and trim functions.
