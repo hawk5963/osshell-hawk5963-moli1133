@@ -47,10 +47,10 @@ int main (int argc, char **argv)
     while(1)
     {
         blackFlag = 0;
-        //read in all lines from file.
+        //read in all lines from file. 
         string input;
-        ifstream myfile;
-        myfile.open("history.txt");
+        ifstream myfile;    
+        myfile.open("history.txt");    
         string line;
         temp.clear();
         history.clear();
@@ -64,7 +64,7 @@ int main (int argc, char **argv)
         myfile.close();
         //check how many lines are in the file. If there are 128 or more lines, we only read in the last 127 lines (in order to leave room for the entered command).
         //best case, the file had less than 128 lines. If not, we only read in the last 127 lines. Regardless, we dump the commands into history from temp. (By pushback)
-
+        
         if(temp.size() < 128)
         {
            for(int k = 0; k < temp.size(); k++)
@@ -79,8 +79,8 @@ int main (int argc, char **argv)
                 history.push_back(temp[k]);
             }
         }
-
-
+        
+        
         //take input.
         cout << "osshell> ";
         getline(cin, input);
@@ -98,8 +98,8 @@ int main (int argc, char **argv)
         {
             for(int i = 0; i < elemList[1].size(); i++)
             {
-                if(elemList[1][i] != '1' && elemList[1][i] != '2' && elemList[1][i] != '3'
-                && elemList[1][i] != '4' && elemList[1][i] != '5' && elemList[1][i] != '6'
+                if(elemList[1][i] != '1' && elemList[1][i] != '2' && elemList[1][i] != '3' 
+                && elemList[1][i] != '4' && elemList[1][i] != '5' && elemList[1][i] != '6' 
                 && elemList[1][i] != '7' && elemList[1][i] != '8' && elemList[1][i] != '9' && elemList[1][i] != '0')
                 {
                     flag = 1;
@@ -147,7 +147,7 @@ int main (int argc, char **argv)
         ofstream myfile2;
         //if numberToStrip is the same as the input, there was no whitespace and this will allow history and exit to work properly.
         //this isn't a great approach, because what if they input "history ". Can we trim it, or can we just check if there is no occurence of the delimiter?
-
+        
         if(input == "history clear")
         {
             //wipe our vector and the file.
@@ -156,7 +156,7 @@ int main (int argc, char **argv)
             myfile2.close();
             blackFlag = 1;
         }
-        //deal with history and then some number as long as it's greater than 0 and less than 128. Otherwise, throw an error.
+        //deal with history and then some number as long as it's greater than 0 and less than 128. Otherwise, throw an error. 
         //history 1 will work, history       128 will work (even though it's stupid and does what history would do anyway), history 2 a would break, history 2  4 would also break.
         //push input onto history as the last element.
         if(input != "history clear")
@@ -194,7 +194,7 @@ int main (int argc, char **argv)
             vector<string> inputVector = Split(Smash(SplitQuotes(input)));
             string fullPath = GetFullPath(inputVector[0]);
             //cout << "GETFULLPATH RETURNS: " << fullPath << endl;
-
+            
             char** inputArray = StringVectorToArrayCharArray(inputVector);
             int status;
             pid_t pid =  fork();
@@ -205,9 +205,22 @@ int main (int argc, char **argv)
             else
             {
                 execv(fullPath.c_str(), inputArray);
+                DeleteArrayCharArray(inputArray, strlen(*inputArray));
+                //dump everything in our history vector into history.txt
+
+                myfile2.open("history.txt");
+
+                for(int j = 0; j < history.size(); j++)
+                {
+                    line = history[j];
+                    myfile2 << line << endl;
+                }
+                myfile2.close();
                 exit(1);
             }
         }
+        
+        
         //dump everything in our history vector into history.txt
         myfile2.open("history.txt");
         for(int j = 0; j < history.size(); j++)
@@ -216,6 +229,7 @@ int main (int argc, char **argv)
             myfile2 << line << endl;
         }
         myfile2.close();
+        
 
     }
     return 0;
@@ -250,7 +264,7 @@ std::string GetFullPath(std::string cmd)
     string path_and_cmd;
     //vector of all paths
     vector<string> paths = SplitPath(env);
-
+    
     for(int i = 0; i<paths.size(); i++)
     {
         path_and_cmd = paths[i]+"/"+cmd;
@@ -259,12 +273,19 @@ std::string GetFullPath(std::string cmd)
             fclose(file);
             //cout<<"FOUND COMMAND IN PATH: "<<path_and_cmd<<endl;
             return path_and_cmd;
-
+            
         }
-
-
+           
+        
     }
-    cout << "Error running command" << endl;
+    if(cmd.find("history")==string::npos)
+    {
+        cout << cmd << ": Error running command" << endl;
+    }
+    else
+    {
+        cout << "Error: history expects an integer > 0 (or 'clear')" << endl;
+    }
     //cout<<"COULDN'T FIND COMMAND IN PATH"<<endl;
     return cmd;
 }
@@ -292,10 +313,10 @@ std::vector<std::string> Split(std::string toSplit)
 {
     string smashed;
     istringstream buffer(trim(toSplit));
-
+    
     vector<string> splitList;
-
-    copy(istream_iterator<string>(buffer),
+    
+    copy(istream_iterator<string>(buffer), 
               istream_iterator<string>(),
               back_inserter(splitList));
     return splitList;
