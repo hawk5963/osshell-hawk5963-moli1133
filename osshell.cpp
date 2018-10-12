@@ -124,14 +124,14 @@ int main (int argc, char **argv)
             {
                 for(int i = start; i < end; i++)
                 {
-                    cout << "  " << i << ": " << history[i] << endl;
+                    cout << "  " << i+1 << ": " << history[i] << endl; //CHECK HERE BOYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
                 }
             }
             else
             {
                 for(int i = 0; i < history.size(); i++)
                 {
-                    cout << "  " << i << ": " << history[i] << endl;
+                    cout << "  " << i+1 << ": " << history[i] << endl; //CHECK HERE BOYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
                 }
             }
         }
